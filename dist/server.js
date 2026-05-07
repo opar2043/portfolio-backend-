@@ -20805,27 +20805,27 @@ var require_router = __commonJS({
     var slice = Array.prototype.slice;
     var flatten = Array.prototype.flat;
     var methods = METHODS.map((method) => method.toLowerCase());
-    module.exports = Router;
+    module.exports = Router2;
     module.exports.Route = Route;
-    function Router(options) {
-      if (!(this instanceof Router)) {
-        return new Router(options);
+    function Router2(options) {
+      if (!(this instanceof Router2)) {
+        return new Router2(options);
       }
       const opts = options || {};
-      function router(req, res, next) {
-        router.handle(req, res, next);
+      function router2(req, res, next) {
+        router2.handle(req, res, next);
       }
-      Object.setPrototypeOf(router, this);
-      router.caseSensitive = opts.caseSensitive;
-      router.mergeParams = opts.mergeParams;
-      router.params = {};
-      router.strict = opts.strict;
-      router.stack = [];
-      return router;
+      Object.setPrototypeOf(router2, this);
+      router2.caseSensitive = opts.caseSensitive;
+      router2.mergeParams = opts.mergeParams;
+      router2.params = {};
+      router2.strict = opts.strict;
+      router2.stack = [];
+      return router2;
     }
-    Router.prototype = function() {
+    Router2.prototype = function() {
     };
-    Router.prototype.param = function param(name, fn) {
+    Router2.prototype.param = function param(name, fn) {
       if (!name) {
         throw new TypeError("argument name is required");
       }
@@ -20845,7 +20845,7 @@ var require_router = __commonJS({
       params.push(fn);
       return this;
     };
-    Router.prototype.handle = function handle(req, res, callback) {
+    Router2.prototype.handle = function handle(req, res, callback) {
       if (!callback) {
         throw new TypeError("argument callback is required");
       }
@@ -20972,7 +20972,7 @@ var require_router = __commonJS({
         }
       }
     };
-    Router.prototype.use = function use(handler) {
+    Router2.prototype.use = function use(handler) {
       let offset = 0;
       let path = "/";
       if (typeof handler !== "function") {
@@ -21005,7 +21005,7 @@ var require_router = __commonJS({
       }
       return this;
     };
-    Router.prototype.route = function route(path) {
+    Router2.prototype.route = function route(path) {
       const route2 = new Route(path);
       const layer = new Layer(path, {
         sensitive: this.caseSensitive,
@@ -21020,7 +21020,7 @@ var require_router = __commonJS({
       return route2;
     };
     methods.concat("all").forEach(function(method) {
-      Router.prototype[method] = function(path) {
+      Router2.prototype[method] = function(path) {
         const route = this.route(path);
         route[method].apply(route, slice.call(arguments, 1));
         return this;
@@ -21203,13 +21203,13 @@ var require_application = __commonJS({
     var compileTrust = require_utils3().compileTrust;
     var resolve = __require("node:path").resolve;
     var once = require_once();
-    var Router = require_router();
+    var Router2 = require_router();
     var slice = Array.prototype.slice;
     var flatten = Array.prototype.flat;
     var app2 = exports = module.exports = {};
     var trustProxyDefaultSymbol = "@@symbol:trust_proxy_default";
     app2.init = function init() {
-      var router = null;
+      var router2 = null;
       this.cache = /* @__PURE__ */ Object.create(null);
       this.engines = /* @__PURE__ */ Object.create(null);
       this.settings = /* @__PURE__ */ Object.create(null);
@@ -21218,13 +21218,13 @@ var require_application = __commonJS({
         configurable: true,
         enumerable: true,
         get: function getrouter() {
-          if (router === null) {
-            router = new Router({
+          if (router2 === null) {
+            router2 = new Router2({
               caseSensitive: this.enabled("case sensitive routing"),
               strict: this.enabled("strict routing")
             });
           }
-          return router;
+          return router2;
         }
       });
     };
@@ -21295,15 +21295,15 @@ var require_application = __commonJS({
       if (fns.length === 0) {
         throw new TypeError("app.use() requires a middleware function");
       }
-      var router = this.router;
+      var router2 = this.router;
       fns.forEach(function(fn2) {
         if (!fn2 || !fn2.handle || !fn2.set) {
-          return router.use(path, fn2);
+          return router2.use(path, fn2);
         }
         debug(".use app under %s", path);
         fn2.mountpath = path;
         fn2.parent = this;
-        router.use(path, function mounted_app(req, res, next) {
+        router2.use(path, function mounted_app(req, res, next) {
           var orig = req.app;
           fn2.handle(req, res, function(err) {
             Object.setPrototypeOf(req, orig.request);
@@ -23876,7 +23876,7 @@ var require_express = __commonJS({
     var EventEmitter = __require("node:events").EventEmitter;
     var mixin = require_merge_descriptors();
     var proto = require_application();
-    var Router = require_router();
+    var Router2 = require_router();
     var req = require_request();
     var res = require_response();
     exports = module.exports = createApplication;
@@ -23898,8 +23898,8 @@ var require_express = __commonJS({
     exports.application = proto;
     exports.request = req;
     exports.response = res;
-    exports.Route = Router.Route;
-    exports.Router = Router;
+    exports.Route = Router2.Route;
+    exports.Router = Router2;
     exports.json = bodyParser.json;
     exports.raw = bodyParser.raw;
     exports.static = require_serve_static();
@@ -23916,12 +23916,443 @@ var require_express2 = __commonJS({
   }
 });
 
+// node_modules/object-assign/index.js
+var require_object_assign = __commonJS({
+  "node_modules/object-assign/index.js"(exports, module) {
+    "use strict";
+    var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
+    var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+    function toObject(val) {
+      if (val === null || val === void 0) {
+        throw new TypeError("Object.assign cannot be called with null or undefined");
+      }
+      return Object(val);
+    }
+    function shouldUseNative() {
+      try {
+        if (!Object.assign) {
+          return false;
+        }
+        var test1 = new String("abc");
+        test1[5] = "de";
+        if (Object.getOwnPropertyNames(test1)[0] === "5") {
+          return false;
+        }
+        var test2 = {};
+        for (var i = 0; i < 10; i++) {
+          test2["_" + String.fromCharCode(i)] = i;
+        }
+        var order2 = Object.getOwnPropertyNames(test2).map(function(n) {
+          return test2[n];
+        });
+        if (order2.join("") !== "0123456789") {
+          return false;
+        }
+        var test3 = {};
+        "abcdefghijklmnopqrst".split("").forEach(function(letter) {
+          test3[letter] = letter;
+        });
+        if (Object.keys(Object.assign({}, test3)).join("") !== "abcdefghijklmnopqrst") {
+          return false;
+        }
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
+    module.exports = shouldUseNative() ? Object.assign : function(target, source) {
+      var from;
+      var to = toObject(target);
+      var symbols;
+      for (var s = 1; s < arguments.length; s++) {
+        from = Object(arguments[s]);
+        for (var key in from) {
+          if (hasOwnProperty.call(from, key)) {
+            to[key] = from[key];
+          }
+        }
+        if (getOwnPropertySymbols) {
+          symbols = getOwnPropertySymbols(from);
+          for (var i = 0; i < symbols.length; i++) {
+            if (propIsEnumerable.call(from, symbols[i])) {
+              to[symbols[i]] = from[symbols[i]];
+            }
+          }
+        }
+      }
+      return to;
+    };
+  }
+});
+
+// node_modules/cors/lib/index.js
+var require_lib3 = __commonJS({
+  "node_modules/cors/lib/index.js"(exports, module) {
+    (function() {
+      "use strict";
+      var assign = require_object_assign();
+      var vary = require_vary();
+      var defaults = {
+        origin: "*",
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        preflightContinue: false,
+        optionsSuccessStatus: 204
+      };
+      function isString(s) {
+        return typeof s === "string" || s instanceof String;
+      }
+      function isOriginAllowed(origin, allowedOrigin) {
+        if (Array.isArray(allowedOrigin)) {
+          for (var i = 0; i < allowedOrigin.length; ++i) {
+            if (isOriginAllowed(origin, allowedOrigin[i])) {
+              return true;
+            }
+          }
+          return false;
+        } else if (isString(allowedOrigin)) {
+          return origin === allowedOrigin;
+        } else if (allowedOrigin instanceof RegExp) {
+          return allowedOrigin.test(origin);
+        } else {
+          return !!allowedOrigin;
+        }
+      }
+      function configureOrigin(options, req) {
+        var requestOrigin = req.headers.origin, headers = [], isAllowed;
+        if (!options.origin || options.origin === "*") {
+          headers.push([{
+            key: "Access-Control-Allow-Origin",
+            value: "*"
+          }]);
+        } else if (isString(options.origin)) {
+          headers.push([{
+            key: "Access-Control-Allow-Origin",
+            value: options.origin
+          }]);
+          headers.push([{
+            key: "Vary",
+            value: "Origin"
+          }]);
+        } else {
+          isAllowed = isOriginAllowed(requestOrigin, options.origin);
+          headers.push([{
+            key: "Access-Control-Allow-Origin",
+            value: isAllowed ? requestOrigin : false
+          }]);
+          headers.push([{
+            key: "Vary",
+            value: "Origin"
+          }]);
+        }
+        return headers;
+      }
+      function configureMethods(options) {
+        var methods = options.methods;
+        if (methods.join) {
+          methods = options.methods.join(",");
+        }
+        return {
+          key: "Access-Control-Allow-Methods",
+          value: methods
+        };
+      }
+      function configureCredentials(options) {
+        if (options.credentials === true) {
+          return {
+            key: "Access-Control-Allow-Credentials",
+            value: "true"
+          };
+        }
+        return null;
+      }
+      function configureAllowedHeaders(options, req) {
+        var allowedHeaders = options.allowedHeaders || options.headers;
+        var headers = [];
+        if (!allowedHeaders) {
+          allowedHeaders = req.headers["access-control-request-headers"];
+          headers.push([{
+            key: "Vary",
+            value: "Access-Control-Request-Headers"
+          }]);
+        } else if (allowedHeaders.join) {
+          allowedHeaders = allowedHeaders.join(",");
+        }
+        if (allowedHeaders && allowedHeaders.length) {
+          headers.push([{
+            key: "Access-Control-Allow-Headers",
+            value: allowedHeaders
+          }]);
+        }
+        return headers;
+      }
+      function configureExposedHeaders(options) {
+        var headers = options.exposedHeaders;
+        if (!headers) {
+          return null;
+        } else if (headers.join) {
+          headers = headers.join(",");
+        }
+        if (headers && headers.length) {
+          return {
+            key: "Access-Control-Expose-Headers",
+            value: headers
+          };
+        }
+        return null;
+      }
+      function configureMaxAge(options) {
+        var maxAge = (typeof options.maxAge === "number" || options.maxAge) && options.maxAge.toString();
+        if (maxAge && maxAge.length) {
+          return {
+            key: "Access-Control-Max-Age",
+            value: maxAge
+          };
+        }
+        return null;
+      }
+      function applyHeaders(headers, res) {
+        for (var i = 0, n = headers.length; i < n; i++) {
+          var header = headers[i];
+          if (header) {
+            if (Array.isArray(header)) {
+              applyHeaders(header, res);
+            } else if (header.key === "Vary" && header.value) {
+              vary(res, header.value);
+            } else if (header.value) {
+              res.setHeader(header.key, header.value);
+            }
+          }
+        }
+      }
+      function cors2(options, req, res, next) {
+        var headers = [], method = req.method && req.method.toUpperCase && req.method.toUpperCase();
+        if (method === "OPTIONS") {
+          headers.push(configureOrigin(options, req));
+          headers.push(configureCredentials(options));
+          headers.push(configureMethods(options));
+          headers.push(configureAllowedHeaders(options, req));
+          headers.push(configureMaxAge(options));
+          headers.push(configureExposedHeaders(options));
+          applyHeaders(headers, res);
+          if (options.preflightContinue) {
+            next();
+          } else {
+            res.statusCode = options.optionsSuccessStatus;
+            res.setHeader("Content-Length", "0");
+            res.end();
+          }
+        } else {
+          headers.push(configureOrigin(options, req));
+          headers.push(configureCredentials(options));
+          headers.push(configureExposedHeaders(options));
+          applyHeaders(headers, res);
+          next();
+        }
+      }
+      function middlewareWrapper(o) {
+        var optionsCallback = null;
+        if (typeof o === "function") {
+          optionsCallback = o;
+        } else {
+          optionsCallback = function(req, cb) {
+            cb(null, o);
+          };
+        }
+        return function corsMiddleware(req, res, next) {
+          optionsCallback(req, function(err, options) {
+            if (err) {
+              next(err);
+            } else {
+              var corsOptions = assign({}, defaults, options);
+              var originCallback = null;
+              if (corsOptions.origin && typeof corsOptions.origin === "function") {
+                originCallback = corsOptions.origin;
+              } else if (corsOptions.origin) {
+                originCallback = function(origin, cb) {
+                  cb(null, corsOptions.origin);
+                };
+              }
+              if (originCallback) {
+                originCallback(req.headers.origin, function(err2, origin) {
+                  if (err2 || !origin) {
+                    next(err2);
+                  } else {
+                    corsOptions.origin = origin;
+                    cors2(corsOptions, req, res, next);
+                  }
+                });
+              } else {
+                next();
+              }
+            }
+          });
+        };
+      }
+      module.exports = middlewareWrapper;
+    })();
+  }
+});
+
 // src/app.js
 var import_dotenv = __toESM(require_main(), 1);
+var import_express2 = __toESM(require_express2(), 1);
+var import_cors = __toESM(require_lib3(), 1);
+
+// src/module/projects/project.route.js
 var import_express = __toESM(require_express2(), 1);
+
+// src/lib/prisma.js
+import { PrismaClient } from "@prisma/client";
+var prisma = new PrismaClient({});
+var prisma_default = prisma;
+
+// src/module/projects/project.service.js
+var createProject = async (data) => {
+  try {
+    const result = await prisma_default.project.create({
+      data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+var getProjects = async () => {
+  try {
+    const result = await prisma_default.project.findMany();
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+var updateProject = async (id, data) => {
+  try {
+    const result = await prisma_default.project.update({
+      where: {
+        id
+      },
+      data
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+var deleteProject = async (id) => {
+  try {
+    const result = await prisma_default.project.delete({
+      where: {
+        id
+      }
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+var projectService = {
+  createProject,
+  getProjects,
+  updateProject,
+  deleteProject
+};
+
+// src/module/projects/project.controller.js
+var createProject2 = async (req, res) => {
+  try {
+    const result = await projectService.createProject(req.body);
+    res.status(200).json({
+      message: "Project created successfully",
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+      error: error.message
+    });
+  }
+};
+var getProjects2 = async (req, res) => {
+  try {
+    const result = await projectService.getProjects();
+    res.status(200).json({
+      message: "Projects fetched successfully",
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+      error: error.message
+    });
+  }
+};
+var updateProject2 = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await projectService.updateProject(id, req.body);
+    res.status(200).json({
+      message: "Project updated successfully",
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+      error: error.message
+    });
+  }
+};
+var deleteProject2 = async (req, res) => {
+  try {
+    const result = await projectService.deleteProject(req.params.id);
+    res.status(200).json({
+      message: "Data is deleted",
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Data is not deleted",
+      success: false,
+      error: error.message
+    });
+  }
+};
+var projectController = {
+  createProject: createProject2,
+  getProjects: getProjects2,
+  updateProject: updateProject2,
+  deleteProject: deleteProject2
+};
+
+// src/module/projects/project.route.js
+var router = (0, import_express.Router)();
+router.post("/create-project", projectController.createProject);
+router.get("/get-projects", projectController.getProjects);
+router.put("/update/:id", projectController.updateProject);
+router.delete("/delete/:id", projectController.deleteProject);
+var projectRouter = router;
+
+// src/app.js
 import_dotenv.default.config();
-var app = (0, import_express.default)();
-app.use(import_express.default.json());
+var app = (0, import_express2.default)();
+app.use((0, import_cors.default)({
+  origin: "*",
+  credentials: true
+}));
+app.use(import_express2.default.json());
+app.use("/api", projectRouter);
 app.get("/", (req, res) => {
   res.send("Portfolio Backend is running!");
 });
@@ -24214,4 +24645,11 @@ serve-static/index.js:
    * Copyright(c) 2014-2016 Douglas Christopher Wilson
    * MIT Licensed
    *)
+
+object-assign/index.js:
+  (*
+  object-assign
+  (c) Sindre Sorhus
+  @license MIT
+  *)
 */
