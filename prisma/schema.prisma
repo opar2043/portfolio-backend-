@@ -1,13 +1,57 @@
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
+  engineType = "library"
 }
 
 model User {
   id    Int    @id @default(autoincrement())
   name  String
   email String @unique
+}
+
+
+
+
+model Project {
+  id String @id @default(uuid()) @db.Uuid
+  name String
+  project String
+  github String?
+  description String?
+  project_link String?
+  plan String?
+  photo String?
+  tech String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("projects")
+  @@index([name,tech])
+}
+
+
+model Blog {
+  id String @id @default(uuid()) @db.Uuid
+  title String
+  description String?
+  image String?
+  date DateTime @default(now())
+  @@map("blogs")
+  @@index([title])
+}
+
+model Review {
+  id String @id @default(uuid()) @db.Uuid
+  name String?
+  review String?
+  rating Int?
+  photo String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("reviews")
+  @@index([rating])
 }

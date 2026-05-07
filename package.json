@@ -9,7 +9,8 @@
     "generate": "npx prisma generate",
     "migrate": "npx prisma migrate dev",
     "studio": "npx prisma studio",
-    "start": "node src/server.js"
+    "start": "node dist/server.js",
+    "build": "npx prisma generate && esbuild src/server.js --bundle --platform=node --target=node20 --outfile=dist/server.js --format=esm --external:@prisma/client"
   },
   "keywords": [],
   "author": "",
@@ -17,10 +18,13 @@
   "type": "module",
   "dependencies": {
     "@prisma/client": "^7.8.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "prisma": "^7.8.0"
+    "esbuild": "^0.28.0",
+    "prisma": "^7.8.0",
+    "tsup": "^8.5.1"
   }
 }
